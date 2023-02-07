@@ -1,6 +1,6 @@
-package guru.springframework.spring5webapp.controllers;
+package pt.ricardocabete.livros.controllers.web;
 
-import guru.springframework.spring5webapp.repositories.BookRepository;
+import pt.ricardocabete.livros.repositories.BookRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +18,7 @@ public class BookController {
     public String getBooks(Model model) {
         var books = bookRepository.findAll();
         model.addAttribute("books", books);
+        model.addAttribute("nome", "Inês");
 
         return "books/list";
     }

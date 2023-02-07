@@ -1,11 +1,10 @@
-package guru.springframework.spring5webapp.controllers;
+package pt.ricardocabete.livros.controllers.web;
 
-import guru.springframework.spring5webapp.domain.Author;
-import guru.springframework.spring5webapp.repositories.AuthorRepository;
+import pt.ricardocabete.livros.domain.Author;
+import pt.ricardocabete.livros.repositories.AuthorRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 

@@ -12,11 +12,13 @@
         <th>Id</th>
         <th>First name</th>
         <th>Last name</th>
+        <th>Editar</th>
     </tr>
     <tr th:each="author : ${authors}">
         <td th:text="${author.id}">Lorem ipsum</td>
         <td th:text="${author.firstName}">Author's first name</td>
         <td th:text="${author.lastName}">Author's last name</td>
+        <td><a th:href="@{'/authors/show_update_form/' + ${author.id}}">Editar este autor</a></td>
     </tr>
 </table>
 

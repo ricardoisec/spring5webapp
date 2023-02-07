@@ -1,6 +1,6 @@
-package guru.springframework.spring5webapp.repositories;
+package pt.ricardocabete.livros.repositories;
 
-import guru.springframework.spring5webapp.domain.Book;
+import pt.ricardocabete.livros.domain.Book;
 import org.springframework.data.repository.CrudRepository;
 
 public interface BookRepository extends CrudRepository<Book, Long> {

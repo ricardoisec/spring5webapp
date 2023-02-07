@@ -1,12 +1,12 @@
-package guru.springframework.spring5webapp.domain; // há quem chame model à package ao invés de domain
+package pt.ricardocabete.livros.domain; // há quem chame model à package ao invés de domain
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Set;
 

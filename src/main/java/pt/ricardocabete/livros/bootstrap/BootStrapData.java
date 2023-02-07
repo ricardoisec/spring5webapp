@@ -1,11 +1,11 @@
-package guru.springframework.spring5webapp.bootstrap;
+package pt.ricardocabete.livros.bootstrap;
 
-import guru.springframework.spring5webapp.domain.Author;
-import guru.springframework.spring5webapp.domain.Book;
-import guru.springframework.spring5webapp.domain.Publisher;
-import guru.springframework.spring5webapp.repositories.AuthorRepository;
-import guru.springframework.spring5webapp.repositories.BookRepository;
-import guru.springframework.spring5webapp.repositories.PublisherRepository;
+import pt.ricardocabete.livros.domain.Author;
+import pt.ricardocabete.livros.domain.Book;
+import pt.ricardocabete.livros.domain.Publisher;
+import pt.ricardocabete.livros.repositories.AuthorRepository;
+import pt.ricardocabete.livros.repositories.BookRepository;
+import pt.ricardocabete.livros.repositories.PublisherRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
