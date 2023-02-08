@@ -74,5 +74,10 @@ public class AuthorController {
 
 
 
-    // TODO: DELETE (também vai ter que ser com GET ou POST, inventa uma rota tipo /authors/apagar/{id} ou similar)
+    // DELETE (também vai ter que ser com GET ou POST, inventa uma rota tipo /authors/apagar/{id} ou similar)
+    @GetMapping("/delete/{id}")
+    public String deleteAuthor(@PathVariable("id") long id, Model model) {
+        authorRepository.deleteById(id);
+        return "redirect:/authors";
+    }
 }

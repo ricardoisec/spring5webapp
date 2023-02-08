@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,6 +41,10 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<Author> authors = new HashSet<>();
+
+
+
+
 
     public Book(String title, String isbn) {
         this.title = title;

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Framework Guru</title>
+
+</head>
+<body>
+
+<h1>Lista de Editoras</h1>
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip-code</th>
+        <th>Editar</th>
+        <th>Delete</th>
+    </tr>
+    <tr th:each="publisher : ${publishers}">
+        <td th:text="${publisher.id}">Publisher's id</td>
+        <td th:text="${publisher.name}">Publisher's name</td>
+        <td th:text="${publisher.address}">Publisher's address</td>
+        <td th:text="${publisher.city}">Publisher's city</td>
+        <td th:text="${publisher.State}">Publisher's state</td>
+        <td th:text="${publisher.zip}">Publisher's zip-code</td>
+        <td><a th:href="@{'/publishers/form_update_editora/' + ${publisher.id}}">Editar Editora</a></td>
+        <td><a th:href="@{/apagar_editora/{id}(id=${publisher.id})}">Apagar</a></td>
+    </tr>
+</table>
+
+<a href="/publishers/show_form">Adicionar Editora</a>
+
+</body>
+</html>

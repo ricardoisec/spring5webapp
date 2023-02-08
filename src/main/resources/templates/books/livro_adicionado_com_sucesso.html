@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Spring Framework Guru</title>
+</head>
+<body>
+<h1>Livro adicionado com sucesso!</h1>
+
+<table>
+  <tr>
+    <th>Id</th>
+    <th>Title</th>
+    <th>ISBN</th>
+  </tr>
+  <td th:text="${book.id}">Lorem ipsum</td>
+  <td th:text="${book.title}">Title</td>
+  <td th:text="${book.isbn}">Isbn</td>
+</table>
+
+<a href="/books">Voltar à lista de livros</a>
+
+</body>
+</html>

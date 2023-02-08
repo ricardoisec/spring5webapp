@@ -30,10 +30,8 @@ public class BootStrapData implements CommandLineRunner {
     public void run(String... args) throws Exception {
         System.out.println("Started in Bootstrap");
 
-        Publisher sfgPublishing = new Publisher();
-        sfgPublishing.setName("SFG Publishing");
-        sfgPublishing.setCity("St Peterbourgh");
-        sfgPublishing.setState("FL");
+        Publisher sfgPublishing = new Publisher("SFG Publishing", "2nd St.way",
+                "St Peterbourgh", "FL", "123");
 
         publisherRepository.save(sfgPublishing);
 

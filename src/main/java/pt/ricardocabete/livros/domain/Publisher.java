@@ -6,7 +6,8 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@NoArgsConstructor // Este construtor é exigido pelo JPA
+//@NoArgsConstructor // Este construtor é exigido pelo JPA
+
 @Getter
 @Setter
 @ToString
@@ -20,7 +21,7 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    private String addressLine1;
+    private String address;
     private String city;
     private String state;
     private String zip;
@@ -30,4 +31,14 @@ public class Publisher {
     @JoinColumn(name = "publisher_id")
     private Set<Book> books = new HashSet<>();
 
+    public Publisher(String name, String address, String city, String state, String zip) {
+        this.name = name;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+    }
+    public Publisher() {
+
+    }
 }

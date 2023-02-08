@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Framework Guru</title>
+</head>
+<body>
+<h1>Editora adicionada com sucesso!</h1>
+
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Adress</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip-code</th>
+    </tr>
+    <td th:text="${publisher.id}">Id</td>
+    <td th:text="${publisher.name}">Name</td>
+    <td th:text="${publisher.address}">Address</td>
+    <td th:text="${publisher.city}">City</td>
+    <td th:text="${publisher.State}">State</td>
+    <td th:text="${publisher.zip}">Zip-code</td>
+</table>
+
+<a href="/publishers">Voltar à lista de editoras</a>
+
+</body>
+</html>
