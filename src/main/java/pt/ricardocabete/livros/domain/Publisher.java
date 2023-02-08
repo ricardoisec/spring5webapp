@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+// CABETE: Porque desligaste este construtor do lombok? Depois foste acrescentá-lo lá em baixo
 //@NoArgsConstructor // Este construtor é exigido pelo JPA
 
 @Getter
@@ -38,7 +39,7 @@ public class Publisher {
         this.state = state;
         this.zip = zip;
     }
-    public Publisher() {
+    public Publisher() { // CABETE: Para que criaste este construtor se o lombok o cria por ti?
 
     }
 }

@@ -1,7 +1,7 @@
 package pt.ricardocabete.livros.controllers.web;
 
 import org.springframework.web.bind.annotation.*;
-import pt.ricardocabete.livros.domain.Author;
+import pt.ricardocabete.livros.domain.Author; // CABETE: Porque diabo o livro tem que conhecer autores?
 import pt.ricardocabete.livros.domain.Book;
 import pt.ricardocabete.livros.repositories.BookRepository;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
-    @RequestMapping("/books")
+    @RequestMapping("/books") // CABETE: @RequestMapping é muito antigo, usa @GetMapping, @PostMapping, etc
     public String getBooks(Model model) {
         var books = bookRepository.findAll();
         model.addAttribute("books", books);
@@ -62,4 +62,6 @@ public class BookController {
         return "redirect:/books";
     }
 
+
+    // CABETE: falta apagar o livro
 }

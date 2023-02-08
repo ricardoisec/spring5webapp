@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.GetMapping; // CABETE: Um GetMapping numa Entidade? :-O
 
 import java.util.HashSet;
 import java.util.Set;
@@ -43,7 +43,7 @@ public class Book {
     private Set<Author> authors = new HashSet<>();
 
 
-
+    // CABETE: Estas linhas extra estão a reservar espaço para alguma coisa?
 
 
     public Book(String title, String isbn) {
