@@ -37,6 +37,12 @@ public class AuthorController {
 
     @PostMapping("/authors")
     public String createAuthor(@ModelAttribute("author") Author author, Model model) {
+        // CABETE: Validação de dados - esta não é a única maneira de validar coisas mas é a mais simples para já
+        if (author.getFirstName().isEmpty()) {
+            model.addAttribute("errorMessage", "O first name do autor não pode ficar vazio");
+            return "authors/errors/erro_criacao_autor";
+        }
+
         var resultado = authorRepository.save(author); // INSERT INTO bla bla bla
         model.addAttribute("author", author);
 
