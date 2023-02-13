@@ -34,9 +34,6 @@ public class BookController {
     //Criar livro
     @PostMapping("/books")
     public String addBook(@ModelAttribute("book") Book book, Model model) {
-        var livro = bookRepository.save(book);
-        model.addAttribute("book", book);
-
         //erros
         if (book.getTitle().isEmpty() || book.getTitle() == null) {
             model.addAttribute("errorMessage", "Book title can't be empty or null");
@@ -95,6 +92,9 @@ public class BookController {
 
             }
         }
+
+        var livro = bookRepository.save(book);
+        model.addAttribute("book", book);
 
         return "books/livro_adicionado_com_sucesso";
     }

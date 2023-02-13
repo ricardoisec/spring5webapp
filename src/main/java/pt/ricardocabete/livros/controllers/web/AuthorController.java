@@ -43,11 +43,6 @@ public class AuthorController {
             return "authors/errors/erro_criacao_autor";
         }
 
-        if(author.getFirstName() == null) {
-            model.addAttribute("errorMessage", "Author's first name can't be null");
-            return "authors/errors/erro_criacao_autor";
-        }
-
         if(author.getFirstName().length() < 2) {
             model.addAttribute("errorMessage", "Author's first name can't be less than 2 characters");
             return "authors/errors/erro_criacao_autor";
@@ -56,7 +51,6 @@ public class AuthorController {
         var resultado = authorRepository.save(author); // INSERT INTO bla bla bla
         model.addAttribute("author", author);
 
-        // TODO: Falta gerir o drama do erro
         return "authors/author_criado_com_sucesso";
     }
 

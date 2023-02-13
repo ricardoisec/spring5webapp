@@ -33,9 +33,6 @@ public class PublisherController {
 
     @PostMapping("/publishers")
     public String adicionarPublisher(@ModelAttribute("publisher") Publisher publisher, Model model) {
-        var editora = publisherRepository.save(publisher);
-        model.addAttribute("publisher", publisher);
-
         if (publisher.getName() == null || publisher.getAddress() == null || publisher.getCity() == null || publisher.getCity() == null || publisher.getZip() == null) {
             model.addAttribute("errorMessage", "None of the publisher fields can be empty or null");
             return "publishers/errors/erro_criacao_editora";
@@ -75,9 +72,8 @@ public class PublisherController {
             return "publishers/errors/erro_criacao_editora";
         }
 
-
-
-
+        var editora = publisherRepository.save(publisher);
+        model.addAttribute("publisher", publisher);
 
         return "publishers/publisher_adicionada_com_sucesso";
     }
