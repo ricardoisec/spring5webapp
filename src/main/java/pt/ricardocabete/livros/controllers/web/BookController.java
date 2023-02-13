@@ -3,17 +3,21 @@ package pt.ricardocabete.livros.controllers.web;
 import org.springframework.web.bind.annotation.*;
 import pt.ricardocabete.livros.domain.Author; // CABETE: Porque diabo o livro tem que conhecer autores?
 import pt.ricardocabete.livros.domain.Book;
+import pt.ricardocabete.livros.exception.BookValidationException;
 import pt.ricardocabete.livros.repositories.BookRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import pt.ricardocabete.livros.services.BookService;
 
 @Controller
 public class BookController {
 
+    private final BookService bookService;
     private final BookRepository bookRepository;
 
-    public BookController(BookRepository bookRepository) {
+    public BookController(BookRepository bookRepository, BookService bookService) {
         this.bookRepository = bookRepository;
+        this.bookService = bookService;
     }
 
     @GetMapping("/books") // CABETE: @RequestMapping é muito antigo, usa @GetMapping, @PostMapping, etc
@@ -27,76 +31,22 @@ public class BookController {
 
     //Formulario para Adicionar livro
     @GetMapping("/books/add_form")
-    public String formAddBooks(){
+    public String formAddBooks() {
         return "books/form_adicionar_livro";
     }
 
     //Criar livro
     @PostMapping("/books")
     public String addBook(@ModelAttribute("book") Book book, Model model) {
-        //erros
-        if (book.getTitle().isEmpty() || book.getTitle() == null) {
-            model.addAttribute("errorMessage", "Book title can't be empty or null");
+        try {
+            var bookAdicionado = bookService.addBook(book);
+            model.addAttribute("book", bookAdicionado);
+
+            return "books/livro_adicionado_com_sucesso";
+        } catch (BookValidationException exception) {
+            model.addAttribute("errorMessage", exception.getMessage());
             return "books/errors/erro_criacao_livro";
         }
-
-        if (book.getTitle().length() < 3) {
-            model.addAttribute("errorMessage", "Book title must have at least 3 characters");
-            return "books/errors/erro_criacao_livro";
-        }
-
-        if(book.getIsbn().isEmpty() || book.getIsbn() == null) {
-            model.addAttribute("errorMessage", "Isbn can't be empty or null");
-            return "books/errors/erro_criacao_livro";
-        }
-
-        if(book.getIsbn().length() < 10){
-            model.addAttribute("errorMessage", "Isbn invalid");
-            return "books/errors/erro_criacao_livro";
-        }
-
-        //validacao isbn-10
-        if (book.getIsbn().length() == 10) {
-            int somaDigitos = 0;
-            for (int i = 0; i < book.getIsbn().length()- 1; i++) { //lenght menos 1 porque nao conta o ultimo digito
-                int digitosISBN = Character.getNumericValue(book.getIsbn().charAt(i)); //vai buscar cada numero no isbn
-                int calculo = digitosISBN * (10 - i); //(10 - i) porque tem de descer de 10 para 1
-                somaDigitos += calculo;
-                int digitoValidacao = somaDigitos % 11;
-
-                if (digitoValidacao != Character.getNumericValue(book.getIsbn().charAt(10))){
-                    model.addAttribute("errorMessage", "Isbn invalid");
-                    return "books/errors/erro_criacao_livro";
-                }
-            }
-        }
-
-        //validacao isbn-13
-        if (book.getIsbn().length() == 13) {
-            int somaDigitos = 0;
-            for (int i = 0; i < book.getIsbn().length() - 1; i++) {
-                int digitosISBN = Character.getNumericValue(book.getIsbn().charAt(i));
-
-                if ( i % 2 == 0 ){
-                    somaDigitos += digitosISBN * 1; //se for par multiplica 1
-                } else { //se for impar multiplica por 3
-                    somaDigitos += somaDigitos * 3;
-                }
-
-                int digitoValidacao = 10 - (somaDigitos % 10);
-
-                if (digitoValidacao != Character.getNumericValue(book.getIsbn().charAt(13))){
-                    model.addAttribute("errorMessage", "Isbn invalid");
-                    return "books/errors/erro_criacao_livro";
-                }
-
-            }
-        }
-
-        var livro = bookRepository.save(book);
-        model.addAttribute("book", book);
-
-        return "books/livro_adicionado_com_sucesso";
     }
 
     //Editar o livro
@@ -128,4 +78,26 @@ public class BookController {
         bookRepository.deleteById(id);
         return "redirect:/books";
     }
+
+
+    private boolean validateISBN(String isbn) {
+        // 978-0-306-40615-7
+        isbn = isbn.replace("-", "");
+        // 9780306406157
+        Integer resultado = -1;
+        for (int i = 0; i < isbn.length() - 2; i++) {
+            try {
+                var number = Integer.parseInt(String.valueOf(isbn.charAt(i)));
+                // TODO: fazer as contas e ver quanto dá
+            } catch (NumberFormatException exception) {
+                return false;
+            }
+        }
+        if (resultado.toString().charAt(0) == isbn.charAt(isbn.length() - 1)) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
