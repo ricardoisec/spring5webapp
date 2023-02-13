@@ -24,7 +24,7 @@ public class Publisher {
     private String name;
     private String address;
     private String city;
-    private String state;
+    private String district;
     private String zip;
 
     // @EqualsAndHashCode.Exclude // a exclusão tanto pode ser feita aqui como no topo do ficheiro
@@ -32,14 +32,14 @@ public class Publisher {
     @JoinColumn(name = "publisher_id")
     private Set<Book> books = new HashSet<>();
 
-    public Publisher(String name, String address, String city, String state, String zip) {
+    public Publisher(String name, String address, String city, String district, String zip) {
         this.name = name;
         this.address = address;
         this.city = city;
-        this.state = state;
+        this.district = district;
         this.zip = zip;
     }
     public Publisher() { // CABETE: Para que criaste este construtor se o lombok o cria por ti?
-
+        //estava me a dar estrilho e ao fazer assim não deu xD
     }
 }

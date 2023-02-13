@@ -2,37 +2,46 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+
     <title>Spring Framework Guru</title>
 
 </head>
 <body>
+<div class="ml-5 mt-5">
+    <h1>Lista de Editoras</h1>
+</div>
 
-<h1>Lista de Editoras</h1>
 
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Address</th>
-        <th>City</th>
-        <th>State</th>
-        <th>Zip-code</th>
-        <th>Editar</th>
-        <th>Delete</th>
-    </tr>
-    <tr th:each="publisher : ${publishers}">
-        <td th:text="${publisher.id}">Publisher's id</td>
-        <td th:text="${publisher.name}">Publisher's name</td>
-        <td th:text="${publisher.address}">Publisher's address</td>
-        <td th:text="${publisher.city}">Publisher's city</td>
-        <td th:text="${publisher.State}">Publisher's state</td>
-        <td th:text="${publisher.zip}">Publisher's zip-code</td>
-        <td><a th:href="@{'/publishers/form_update_editora/' + ${publisher.id}}">Editar Editora</a></td>
-        <td><a th:href="@{/apagar_editora/{id}(id=${publisher.id})}">Apagar</a></td>
-    </tr>
+<table  class="table table-striped my-5 ml-5 w-75">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Address</th>
+            <th scope="col">City</th>
+            <th scope="col">District</th>
+            <th scope="col">Zip-code</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Delete</th>
+        </tr>
+    <tbody>
+        <tr scope="row" th:each="publisher : ${publishers}">
+            <td th:text="${publisher.id}">Publisher's id</td>
+            <td th:text="${publisher.name}">Publisher's name</td>
+            <td th:text="${publisher.address}">Publisher's address</td>
+            <td th:text="${publisher.city}">Publisher's city</td>
+            <td th:text="${publisher.district}">Publisher's district</td>
+            <td th:text="${publisher.zip}">Publisher's zip-code</td>
+            <td><a th:href="@{'/publishers/form_update_editora/' + ${publisher.id}}">Editar Editora</a></td>
+            <td><a th:href="@{/apagar_editora/{id}(id=${publisher.id})}">Apagar</a></td>
+        </tr>
+    </tbody>
+    </thead>
 </table>
 
-<a href="/publishers/show_form">Adicionar Editora</a>
+<a class="btn btn-primary ml-5" href="/publishers/show_form">Adicionar Editora</a>
 
 </body>
 </html>

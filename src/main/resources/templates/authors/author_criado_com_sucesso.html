@@ -2,6 +2,8 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Spring Framework Guru</title>
 </head>
 <body>
@@ -18,7 +20,7 @@
         <td th:text="${author.lastName}">Author's last name</td>
 </table>
 
-<a href="/authors">Voltar à lista de autores</a>
+<a class="btn btn-primary ml-5" href="/authors">Voltar à lista de autores</a>
 
 </body>
 </html>

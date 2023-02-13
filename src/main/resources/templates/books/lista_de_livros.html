@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Spring Framework Guru</title>
 </head>
@@ -18,6 +19,7 @@
         <th scope="col">TITLE</th>
         <th scope="col">ISBN</th>
         <th scope="col">EDIT</th>
+        <th scope="col">Delete</th>
     </tr>
     <tbody>
         <tr scope="row" th:each="book : ${books}">
@@ -25,6 +27,7 @@
             <td th:text="${book.title}">Book's title</td>
             <td th:text="${book.Isbn}">Book's Isbn</td>
             <td><a th:href="@{'/books/update_form/' + ${book.id}}">Editar livro</a></td>
+            <td><a th:href="@{/apagar_livro/{id}(id=${book.id})}">Apagar</a></td>
         </tr>
     </tbody>
 </thead>

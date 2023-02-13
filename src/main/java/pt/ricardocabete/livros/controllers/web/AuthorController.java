@@ -37,9 +37,19 @@ public class AuthorController {
 
     @PostMapping("/authors")
     public String createAuthor(@ModelAttribute("author") Author author, Model model) {
-        // CABETE: Validação de dados - esta não é a única maneira de validar coisas mas é a mais simples para já
+        //Validação de dados
         if (author.getFirstName().isEmpty()) {
             model.addAttribute("errorMessage", "O first name do autor não pode ficar vazio");
+            return "authors/errors/erro_criacao_autor";
+        }
+
+        if(author.getFirstName() == null) {
+            model.addAttribute("errorMessage", "Author's first name can't be null");
+            return "authors/errors/erro_criacao_autor";
+        }
+
+        if(author.getFirstName().length() < 2) {
+            model.addAttribute("errorMessage", "Author's first name can't be less than 2 characters");
             return "authors/errors/erro_criacao_autor";
         }
 
