@@ -2,6 +2,7 @@ package pt.ricardocabete.livros.services;
 
 import org.springframework.stereotype.Service;
 import pt.ricardocabete.livros.domain.Book;
+import pt.ricardocabete.livros.exception.BookNotFoundException;
 import pt.ricardocabete.livros.exception.BookValidationException;
 import pt.ricardocabete.livros.repositories.BookRepository;
 
@@ -15,59 +16,94 @@ public class BookService {
     }
 
     public Book addBook(Book book) throws BookValidationException {
-        validateBookTitle(book);
-       // validateBookIsbn(book);
+        validateBookTitle(book.getTitle());
+        validateBookIsbn(book.getIsbn());
 
         return bookRepository.save(book);
     }
 
-    private void validateBookTitle(Book book) throws BookValidationException {
-        if (book.getTitle().isEmpty()) {
+    public void updateBook(Book book, Long id) throws BookValidationException {
+        validateBookTitle(book.getTitle());
+        validateBookIsbn(book.getIsbn());
+
+        var existingBook = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+        existingBook.setTitle(book.getTitle());
+        existingBook.setIsbn(book.getIsbn());
+
+        bookRepository.save(existingBook);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public void validateBookTitle(String bookTitle) throws BookValidationException {
+        if (bookTitle.isEmpty()) {
             throw new BookValidationException("Book title can't be empty or null");
         }
 
-        if (book.getTitle().length() < 3) {
+        if (bookTitle.length() < 3) {
             throw new BookValidationException("Book title must have at least 3 characters");
         }
     }
 
-//
-//        //validacao isbn-10
-//        if (book.getIsbn().length() == 10) {
-//            int somaDigitos = 0;
-//            for (int i = 0; i < book.getIsbn().length() - 1; i++) { //lenght menos 1 porque nao conta o ultimo digito
-//                int digitosISBN = Character.getNumericValue(book.getIsbn().charAt(i)); //vai buscar cada numero no isbn
-//                int calculo = digitosISBN * (10 - i); //(10 - i) porque tem de descer de 10 para 1
-//                somaDigitos += calculo;
-//                int digitoValidacao = somaDigitos % 11;
-//
-//                if (digitoValidacao != Character.getNumericValue(book.getIsbn().charAt(10))) {
-//                    model.addAttribute("errorMessage", "Isbn invalid");
-//                    return "books/errors/erro_criacao_livro";
-//                }
-//            }
-//        }
-//
-//        //validacao isbn-13
-//        if (book.getIsbn().length() == 13) {
-//            int somaDigitos = 0;
-//            for (int i = 0; i < book.getIsbn().length() - 1; i++) {
-//                int digitosISBN = Character.getNumericValue(book.getIsbn().charAt(i));
-//
-//                if (i % 2 == 0) {
-//                    somaDigitos += digitosISBN * 1; //se for par multiplica 1
-//                } else { //se for impar multiplica por 3
-//                    somaDigitos += somaDigitos * 3;
-//                }
-//
-//                int digitoValidacao = 10 - (somaDigitos % 10);
-//
-//                if (digitoValidacao != Character.getNumericValue(book.getIsbn().charAt(13))) {
-//                    model.addAttribute("errorMessage", "Isbn invalid");
-//                    return "books/errors/erro_criacao_livro";
-//                }
-//
-//            }
-//        }
-//    }
+    public boolean validateBookIsbn(String isbn) {
+        if (isbn == null || isbn.isEmpty()) {
+            return false;
+        }
+
+        // 978-0-306-40615-7
+        isbn = isbn.replace("-", "");
+        // 9780306406157
+        Integer resultado = -1;
+        int somaDigitos = 0;
+        for (int i = 0; i < isbn.length() - 2; i++) {
+            try {
+                var number = Integer.parseInt(String.valueOf(isbn.charAt(i)));
+                // TODO: fazer as contas e ver quanto dá
+                if (isbn.length() == 10) {
+                    int calculo = number * (10 - i); //(10 - i) porque tem de descer de 10 para 1
+                    somaDigitos += calculo;
+                    resultado = somaDigitos % 11;
+                }
+
+                if (isbn.length() == 13) {
+                    StringBuilder isbn13 = new StringBuilder("978");
+                    String isbn9 = isbn.substring(0, 9);
+                    isbn13.append(isbn9);
+
+                    if (i % 2 == 0) {   //se for par multiplica 1
+                        somaDigitos += number * 1;
+                    } else {            //se for impar multiplica por 3
+                        somaDigitos += somaDigitos * 3;
+                    }
+
+                    int digitoValidacao = 10 - (somaDigitos % 10);
+                    isbn13.append(digitoValidacao);
+                }
+
+            } catch (NumberFormatException exception) {
+                return false;
+            }
+        }
+        if (resultado.toString().charAt(0) == isbn.charAt(isbn.length() - 1)) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -87,6 +87,9 @@ public class AuthorController {
     // DELETE (também vai ter que ser com GET ou POST, inventa uma rota tipo /authors/apagar/{id} ou similar)
     @GetMapping("/delete/{id}")
     public String deleteAuthor(@PathVariable("id") long id, Model model) {
+        // todo: apagar todos os livros que tenham esse autor e depois apagar o autor
+        // List<Book> listaDeLivrosDoAutor = bookService.getBookOfAuthor(autor);
+        // delete À listaDeLivrosDoAutor
         authorRepository.deleteById(id);
         return "redirect:/authors";
     }
