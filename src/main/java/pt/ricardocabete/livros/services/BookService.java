@@ -16,7 +16,7 @@ public class BookService {
 
     public Book addBook(Book book) throws BookValidationException {
         validateBookTitle(book);
-//        validateBookIsbn(book);
+       // validateBookIsbn(book);
 
         return bookRepository.save(book);
     }
@@ -31,16 +31,6 @@ public class BookService {
         }
     }
 
-//    private void validateBookIsbn(Book book) throws BookValidationException {
-//        if (book.getIsbn().isEmpty()) {
-//            model.addAttribute("errorMessage", "Isbn can't be empty or null");
-//            return "books/errors/erro_criacao_livro";
-//        }
-//
-//        if (book.getIsbn().length() < 10) {
-//            model.addAttribute("errorMessage", "Isbn invalid");
-//            return "books/errors/erro_criacao_livro";
-//        }
 //
 //        //validacao isbn-10
 //        if (book.getIsbn().length() == 10) {

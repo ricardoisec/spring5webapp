@@ -20,7 +20,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/books") // CABETE: @RequestMapping é muito antigo, usa @GetMapping, @PostMapping, etc
+    @GetMapping("/books")
     public String getBooks(Model model) {
         var books = bookRepository.findAll();
         model.addAttribute("books", books);
@@ -85,10 +85,32 @@ public class BookController {
         isbn = isbn.replace("-", "");
         // 9780306406157
         Integer resultado = -1;
+        int somaDigitos = 0;
         for (int i = 0; i < isbn.length() - 2; i++) {
             try {
                 var number = Integer.parseInt(String.valueOf(isbn.charAt(i)));
                 // TODO: fazer as contas e ver quanto dá
+                if (isbn.length() == 10) {
+                    int calculo = number * (10 - i); //(10 - i) porque tem de descer de 10 para 1
+                    somaDigitos += calculo;
+                    resultado = somaDigitos % 11;
+                }
+
+                if (isbn.length() == 13) {
+                    StringBuilder isbn13 = new StringBuilder("978");
+                    String isbn9 = isbn.substring(0, 9);
+                    isbn13.append(isbn9);
+
+                    if (i % 2 == 0) {   //se for par multiplica 1
+                        somaDigitos += number * 1;
+                    } else {            //se for impar multiplica por 3
+                        somaDigitos += somaDigitos * 3;
+                    }
+
+                    int digitoValidacao = 10 - (somaDigitos % 10);
+                    isbn13.append(digitoValidacao);
+                }
+
             } catch (NumberFormatException exception) {
                 return false;
             }
