@@ -6,6 +6,8 @@ import pt.ricardocabete.livros.exception.AuthorNotFoundException;
 import pt.ricardocabete.livros.exception.AuthorValidationException;
 import pt.ricardocabete.livros.repositories.AuthorRepository;
 
+import java.util.List;
+
 @Service
 public class AuthorService {
     private final AuthorRepository authorRepository;
@@ -14,11 +16,43 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
+    public Iterable<Author> getAllAuthors() {
+        return authorRepository.findAll();
+    }
+
     public Author createAuthor(Author author) throws AuthorValidationException {
         validateAuthorFirstName(author.getFirstName());
+        validateAuthorLastName(author.getLastName());
 
         return authorRepository.save(author);
     }
+
+    public void updateAutor(Author author, Long id) throws AuthorValidationException {
+        validateAuthorFirstName(author.getFirstName());
+        validateAuthorLastName(author.getLastName());
+
+        var existingAuthor = authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
+        existingAuthor.setFirstName(author.getFirstName());
+        existingAuthor.setLastName(author.getLastName());
+
+        authorRepository.save(existingAuthor);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void validateAuthorFirstName(String firstName) {
         if (firstName.isEmpty()) {
@@ -30,14 +64,13 @@ public class AuthorService {
         }
     }
 
-    public void updateAutor(Author author, Long id) throws AuthorValidationException {
-        validateAuthorFirstName(author.getFirstName());
+    public void validateAuthorLastName(String lastName) {
+        if (lastName.isEmpty()) {
+            throw new AuthorValidationException("Last Name can't be empty");
+        }
 
-        var existingAuthor = authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException(id));
-        existingAuthor.setFirstName(author.getFirstName());
-        existingAuthor.setLastName(author.getLastName());
-
-        authorRepository.save(existingAuthor);
-
+        if(lastName.length() < 2) {
+            throw new AuthorValidationException("Last Name must have more than 2 characters");
+        }
     }
 }

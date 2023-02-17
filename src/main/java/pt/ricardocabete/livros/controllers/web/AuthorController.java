@@ -3,7 +3,6 @@ package pt.ricardocabete.livros.controllers.web;
 import org.springframework.web.bind.annotation.*;
 import pt.ricardocabete.livros.domain.Author;
 import pt.ricardocabete.livros.exception.AuthorValidationException;
-import pt.ricardocabete.livros.repositories.AuthorRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import pt.ricardocabete.livros.services.AuthorService;
@@ -13,15 +12,15 @@ import java.util.NoSuchElementException;
 @Controller
 public class AuthorController {
 
-    private final AuthorRepository authorRepository;
+    private final AuthorService authorService;
 
-    public AuthorController(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
+    public AuthorController(AuthorService authorService) {
+        this.authorService = authorService;
     }
 
     @GetMapping("/authors")
     public String getAuthors(Model model) {
-        var authors = authorRepository.findAll(); // vai à BD buscar todos os autores
+        var authors = authorService.getAllAuthors();
         model.addAttribute("authors", authors);
 
         return "authors/listar_todos_os_autores";
@@ -41,7 +40,7 @@ public class AuthorController {
     @PostMapping("/authors")
     public String createAuthor(@ModelAttribute("author") Author author, Model model) {
         try {
-            authorRepository.save(author);
+// TODO:            authorRepository.save(author);
             model.addAttribute("author", author);
 
             return "authors/author_criado_com_sucesso";
@@ -59,8 +58,8 @@ public class AuthorController {
     //    isso é reflectido no método updateAuthor
     @GetMapping("/authors/show_update_form/{id}")
     public String mostrarFormEditarAutor(@PathVariable Long id, Model model) {
-        var author = authorRepository.findById(id).orElse(null);
-        model.addAttribute("author", author);
+// TODO:        var author = authorRepository.findById(id).orElse(null);
+//        model.addAttribute("author", author);
         return "authors/form_edicao_autor";
     }
 
@@ -71,15 +70,13 @@ public class AuthorController {
     @PostMapping("/authors/{id}")
     public String updateAuthor(@ModelAttribute("author") Author author, @PathVariable Long id, Model model) {
        try {
-          // AuthorService.updateAutor(author, id); //TODO:solve this
+           authorService.updateAutor(author, id);
 
            return "redirect:/authors";
        } catch (AuthorValidationException | NoSuchElementException exception) {
            model.addAttribute("errorMessage", exception.getMessage());
            return "erro_edicao_autor";
        }
-
-
     }
 
 
@@ -90,7 +87,7 @@ public class AuthorController {
         // todo: apagar todos os livros que tenham esse autor e depois apagar o autor
         // List<Book> listaDeLivrosDoAutor = bookService.getBookOfAuthor(autor);
         // delete À listaDeLivrosDoAutor
-        authorRepository.deleteById(id);
+// TODO:        authorRepository.deleteById(id);
         return "redirect:/authors";
     }
 }
