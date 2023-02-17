@@ -2,11 +2,13 @@ package pt.ricardocabete.livros.controllers.web;
 
 import org.springframework.web.bind.annotation.*;
 import pt.ricardocabete.livros.domain.Author;
+import pt.ricardocabete.livros.exception.AuthorValidationException;
 import pt.ricardocabete.livros.repositories.AuthorRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import pt.ricardocabete.livros.services.AuthorService;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Controller
 public class AuthorController {
@@ -35,23 +37,18 @@ public class AuthorController {
         return "authors/form_criacao_autor";
     }
 
+
     @PostMapping("/authors")
     public String createAuthor(@ModelAttribute("author") Author author, Model model) {
-        //Validação de dados
-        if (author.getFirstName().isEmpty()) {
-            model.addAttribute("errorMessage", "O first name do autor não pode ficar vazio");
+        try {
+            authorRepository.save(author);
+            model.addAttribute("author", author);
+
+            return "authors/author_criado_com_sucesso";
+        } catch (AuthorValidationException exception) {
+            model.addAttribute("errorMessage", exception.getMessage());
             return "authors/errors/erro_criacao_autor";
         }
-
-        if(author.getFirstName().length() < 2) {
-            model.addAttribute("errorMessage", "Author's first name can't be less than 2 characters");
-            return "authors/errors/erro_criacao_autor";
-        }
-
-        var resultado = authorRepository.save(author); // INSERT INTO bla bla bla
-        model.addAttribute("author", author);
-
-        return "authors/author_criado_com_sucesso";
     }
 
 
@@ -73,13 +70,16 @@ public class AuthorController {
     // A alternativa era um AJAX com javascript (simples de fazer mas para começar mais vale assim)
     @PostMapping("/authors/{id}")
     public String updateAuthor(@ModelAttribute("author") Author author, @PathVariable Long id, Model model) {
-        var existingAuthor = authorRepository.findById(id).orElseThrow();
-        existingAuthor.setFirstName(author.getFirstName());
-        existingAuthor.setLastName(author.getLastName());
+       try {
+          // AuthorService.updateAutor(author, id); //TODO:solve this
 
-        Author updatedAuthor = authorRepository.save(existingAuthor);
+           return "redirect:/authors";
+       } catch (AuthorValidationException | NoSuchElementException exception) {
+           model.addAttribute("errorMessage", exception.getMessage());
+           return "erro_edicao_autor";
+       }
 
-        return "redirect:/authors";
+
     }
 
 

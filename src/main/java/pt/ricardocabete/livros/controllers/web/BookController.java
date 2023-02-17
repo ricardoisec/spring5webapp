@@ -69,7 +69,7 @@ public class BookController {
             return "redirect:/books";
         } catch (BookValidationException | NoSuchElementException exception) {
             model.addAttribute("errorMessage", exception.getMessage());
-            return "books/errors/erro_criacao_livro"; // mudar a vista do erro
+            return "books/errors/erro_edicao_livro";
         }
     }
 
