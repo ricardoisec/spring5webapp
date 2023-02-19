@@ -2,20 +2,23 @@ package pt.ricardocabete.livros.controllers.web;
 
 import org.springframework.web.bind.annotation.*;
 import pt.ricardocabete.livros.domain.Publisher;
+import pt.ricardocabete.livros.exception.BookValidationException;
 import pt.ricardocabete.livros.exception.PublisherValidationException;
 import pt.ricardocabete.livros.repositories.PublisherRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import pt.ricardocabete.livros.services.PublisherService;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.NoSuchElementException;
 
 @Controller
 public class PublisherController {
     private final PublisherRepository publisherRepository;
+    private final PublisherService publisherService;
 
-    public PublisherController(PublisherRepository publisherRepository) {
+    public PublisherController(PublisherRepository publisherRepository, PublisherService publisherService) {
         this.publisherRepository = publisherRepository;
+        this.publisherService = publisherService;
     }
 
     @GetMapping ("/publishers")
@@ -36,13 +39,13 @@ public class PublisherController {
     public String adicionarPublisher(@ModelAttribute("publisher") Publisher publisher, Model model) {
 
         try {
-            publisherRepository.save(publisher);
+            publisherService.createPublisher(publisher);
             model.addAttribute("publisher", publisher);
 
             return "publishers/publisher_adicionada_com_sucesso";
         } catch (PublisherValidationException exception) {
             model.addAttribute("errorMessage", exception.getMessage());
-            return "erro_criacao_editora";
+            return "publishers/errors/erro_criacao_editora";
         }
 
 
@@ -58,16 +61,16 @@ public class PublisherController {
 
     @PostMapping("publishers/{id}")
     public String editarPublisher(@ModelAttribute("publisher") Publisher publisher, @PathVariable Long id, Model model) {
-        var existingPublisher = publisherRepository.findById(id).orElseThrow();
-        existingPublisher.setName(publisher.getName());
-        existingPublisher.setAddress(publisher.getAddress());
-        existingPublisher.setCity(publisher.getCity());
-        existingPublisher.setDistrict(publisher.getDistrict());
-        existingPublisher.setZip(publisher.getZip());
+        try {
+            publisherService.updatePublisher(publisher, id);
 
-        Publisher updatePublisher = publisherRepository.save(existingPublisher);
+            return "redirect:/publishers";
+        } catch (PublisherValidationException | NoSuchElementException exception) {
+            model.addAttribute("errorMessage", exception.getMessage());
+            return "publishers/errors/erro_edicao_editora";
+        }
 
-        return "redirect:/publishers";
+
     }
 
     //Apagar

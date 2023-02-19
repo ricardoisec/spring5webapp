@@ -1,10 +1,14 @@
 package pt.ricardocabete.livros.services;
 
 import org.springframework.stereotype.Service;
+import pt.ricardocabete.livros.domain.Author;
 import pt.ricardocabete.livros.domain.Book;
 import pt.ricardocabete.livros.exception.BookNotFoundException;
 import pt.ricardocabete.livros.exception.BookValidationException;
 import pt.ricardocabete.livros.repositories.BookRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BookService {
@@ -31,6 +35,10 @@ public class BookService {
         existingBook.setIsbn(book.getIsbn());
 
         bookRepository.save(existingBook);
+    }
+
+    public List<Book> getBookOfAuthor(Author author) {
+        return new ArrayList<>(author.getBooks());
     }
 
 
@@ -77,7 +85,6 @@ public class BookService {
         for (int i = 0; i < isbn.length() - 2; i++) {
             try {
                 var number = Integer.parseInt(String.valueOf(isbn.charAt(i)));
-                // TODO: fazer as contas e ver quanto dá
                 if (isbn.length() == 10) {
                     int calculo = number * (10 - i); //(10 - i) porque tem de descer de 10 para 1
                     somaDigitos += calculo;

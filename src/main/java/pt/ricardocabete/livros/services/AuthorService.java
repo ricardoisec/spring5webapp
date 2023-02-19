@@ -38,6 +38,10 @@ public class AuthorService {
         authorRepository.save(existingAuthor);
     }
 
+    public void deleteById (Long id) {
+        authorRepository.deleteById(id);
+    }
+
 
 
 

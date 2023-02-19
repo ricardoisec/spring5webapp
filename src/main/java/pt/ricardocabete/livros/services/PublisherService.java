@@ -2,6 +2,8 @@ package pt.ricardocabete.livros.services;
 
 import org.springframework.stereotype.Service;
 import pt.ricardocabete.livros.domain.Publisher;
+import pt.ricardocabete.livros.exception.BookNotFoundException;
+import pt.ricardocabete.livros.exception.PublisherNotFoundException;
 import pt.ricardocabete.livros.exception.PublisherValidationException;
 import pt.ricardocabete.livros.repositories.BookRepository;
 import pt.ricardocabete.livros.repositories.PublisherRepository;
@@ -27,6 +29,39 @@ public class PublisherService {
 
         return publisherRepository.save(publisher);
     }
+
+
+    public Publisher createPublisher(Publisher publisher) throws PublisherValidationException {
+        validatePublisherName(publisher.getName());
+        validatePublisherAddress(publisher.getAddress());
+        validatePublisherCity(publisher.getCity());
+        validatePublisherDistrict(publisher.getDistrict());
+        validatePublisherZipcode(publisher.getZip());
+
+        return publisherRepository.save(publisher);
+    }
+
+    public void updatePublisher(Publisher publisher, Long id) throws PublisherValidationException {
+        validatePublisherName(publisher.getName());
+        validatePublisherAddress(publisher.getAddress());
+        validatePublisherCity(publisher.getCity());
+        validatePublisherDistrict(publisher.getDistrict());
+        validatePublisherZipcode(publisher.getZip());
+
+        var existingPublisher = publisherRepository.findById(id).orElseThrow(() -> new PublisherNotFoundException(id));
+        existingPublisher.setName(publisher.getName());
+        existingPublisher.setAddress(publisher.getAddress());
+        existingPublisher.setCity(publisher.getCity());
+        existingPublisher.setDistrict(publisher.getDistrict());
+        existingPublisher.setZip(publisher.getZip());
+
+        publisherRepository.save(existingPublisher);
+    }
+
+
+
+
+
 
 
     //Validacoes
@@ -73,10 +108,14 @@ public class PublisherService {
 
     public void validatePublisherZipcode (String zip) {
         if (zip == null) {
-            throw new PublisherValidationException("Publisher's district can't be null");
+            throw new PublisherValidationException("Publisher's zipcode can't be null");
         }
 
         if (zip.length() < 7 || zip.length() > 8) {
+            throw new PublisherValidationException("Invalid zipcode");
+        }
+
+        if (zip.length() == 8 && !zip.contains("-")) {
             throw new PublisherValidationException("Invalid zipcode");
         }
 
@@ -84,15 +123,16 @@ public class PublisherService {
         Pattern pattern = Pattern.compile(zipCode);
         Matcher matcher = pattern.matcher(zipCode);
 
-        if (zip.length() == 7) { //TODO: corrigir isto
-            zipCode = zipCode.substring(0, 3) + "-" + zipCode.substring(3);
-        }
+        //if (zip.length() == 7 && !zip.contains("-")) {
+          //  zipCode = zipCode.substring(0, 3) + "-" + zipCode.substring(3);
+        //}
 
         if (!matcher.matches()){
            throw new PublisherValidationException("Zipcode is not valid");
         }
 
     }
+
 
 
 }

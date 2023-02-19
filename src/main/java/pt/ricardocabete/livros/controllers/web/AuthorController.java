@@ -2,20 +2,25 @@ package pt.ricardocabete.livros.controllers.web;
 
 import org.springframework.web.bind.annotation.*;
 import pt.ricardocabete.livros.domain.Author;
+import pt.ricardocabete.livros.domain.Book;
 import pt.ricardocabete.livros.exception.AuthorValidationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import pt.ricardocabete.livros.services.AuthorService;
+import pt.ricardocabete.livros.services.BookService;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
 public class AuthorController {
 
     private final AuthorService authorService;
+    private final BookService bookService;
 
-    public AuthorController(AuthorService authorService) {
+    public AuthorController(AuthorService authorService, BookService bookService) {
         this.authorService = authorService;
+        this.bookService = bookService;
     }
 
     @GetMapping("/authors")
@@ -40,7 +45,7 @@ public class AuthorController {
     @PostMapping("/authors")
     public String createAuthor(@ModelAttribute("author") Author author, Model model) {
         try {
-// TODO:            authorRepository.save(author);
+            authorService.createAuthor(author);
             model.addAttribute("author", author);
 
             return "authors/author_criado_com_sucesso";
@@ -58,8 +63,8 @@ public class AuthorController {
     //    isso é reflectido no método updateAuthor
     @GetMapping("/authors/show_update_form/{id}")
     public String mostrarFormEditarAutor(@PathVariable Long id, Model model) {
-// TODO:        var author = authorRepository.findById(id).orElse(null);
-//        model.addAttribute("author", author);
+        //var author = authorService
+        //model.addAttribute("author", author);
         return "authors/form_edicao_autor";
     }
 
@@ -81,13 +86,17 @@ public class AuthorController {
 
 
 
-    // DELETE (também vai ter que ser com GET ou POST, inventa uma rota tipo /authors/apagar/{id} ou similar)
+    // DELETE
     @GetMapping("/delete/{id}")
-    public String deleteAuthor(@PathVariable("id") long id, Model model) {
-        // todo: apagar todos os livros que tenham esse autor e depois apagar o autor
-        // List<Book> listaDeLivrosDoAutor = bookService.getBookOfAuthor(autor);
+    public String deleteAuthor(@PathVariable("id") long id, Author author, Model model) {
+        //apagar todos os livros que tenham esse autor e depois apagar o autor
+        List<Book> listaDeLivrosDoAutor = bookService.getBookOfAuthor(author);
+        listaDeLivrosDoAutor.clear();
+
+
         // delete À listaDeLivrosDoAutor
-// TODO:        authorRepository.deleteById(id);
+        authorService.deleteById(id);
+
         return "redirect:/authors";
     }
 }

@@ -39,7 +39,4 @@ public class Publisher {
         this.district = district;
         this.zip = zip;
     }
-//    public Publisher() { // CABETE: Para que criaste este construtor se o lombok o cria por ti?
-//        //estava me a dar estrilho e ao fazer assim não deu xD
-//    }
 }
