@@ -13,18 +13,16 @@ import java.util.NoSuchElementException;
 
 @Controller
 public class PublisherController {
-    private final PublisherRepository publisherRepository;
     private final PublisherService publisherService;
 
-    public PublisherController(PublisherRepository publisherRepository, PublisherService publisherService) {
-        this.publisherRepository = publisherRepository;
+    public PublisherController(PublisherService publisherService) {
         this.publisherService = publisherService;
     }
 
     @GetMapping ("/publishers")
     public String getPublishers (Model model) {
-        var publishers = publisherRepository.findAll();
-        model.addAttribute("publishers", publishers);
+//        var publishers = publisherRepository.findAll();
+//        model.addAttribute("publishers", publishers);
 
         return "publishers/lista_de_publishers";
     }
@@ -54,8 +52,8 @@ public class PublisherController {
     //editar publisher
     @GetMapping("/publishers/form_update_editora/{id}")
     public String formEdit (@PathVariable Long id, Model model) {
-        var publisher = publisherRepository.findById(id).orElse(null);
-        model.addAttribute("publisher", publisher);
+//        var publisher = publisherRepository.findById(id).orElse(null);
+//        model.addAttribute("publisher", publisher);
         return "publishers/form_update_editora";
     }
 
@@ -76,7 +74,7 @@ public class PublisherController {
     //Apagar
     @GetMapping("/apagar_editora/{id}")
     public String deletePublisher(@PathVariable("id") long id, Model model) {
-        publisherRepository.deleteById(id);
+//        publisherRepository.deleteById(id);
         return "redirect:/publishers";
     }
 

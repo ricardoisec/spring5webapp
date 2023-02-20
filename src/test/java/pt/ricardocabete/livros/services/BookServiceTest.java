@@ -10,18 +10,13 @@ class BookServiceTest {
     BookService bookService = new BookService(null);
 
     /**
-     * null
-     * ""
-     * " "
+
      * "a"
      * "A"
      * "1"
      * ";"
      *
      * ISBN
-     * 13-valido : 978-3-16-148410-0
-     * 13-invalido : 978-3-16-148410-1
-     * 13-invalido : 978-3-16-148410-a
      * 10-valido: 0-545-01022-5
      * 10-invalido : 0-545-01022-1
      * 10-invalido : 0-545-01022-a
@@ -48,4 +43,33 @@ class BookServiceTest {
         var resultado = bookService.validateBookIsbn(";");
         assertFalse(resultado);
     }
+
+
+
+
+
+    @Test
+    void validateBookIsbnValidIsbn13aTest() {
+        // TODO: Meter este teste a passar
+        var resultado = bookService.validateBookIsbn("978-3-16-148410-0");
+        assertTrue(resultado);
+    }
+
+    @Test
+    void validateBookIsbnValidIsbn13bTest() {
+        var resultado = bookService.validateBookIsbn("978-0-306-40615-7");
+        assertTrue(resultado);
+    }
+
+    @Test
+    void validateBookIsbnInvalidIsbn13aTest() {
+        var resultado = bookService.validateBookIsbn("978-3-16-148410-1");
+        assertFalse(resultado);
+    }
+
+    @Test
+    void validateBookIsbnInvalidIsbn13bTest() {
+        assertThrows(NumberFormatException.class, () -> bookService.validateBookIsbn("978-3-16-148410-a"));
+    }
+
 }

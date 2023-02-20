@@ -9,8 +9,8 @@ import org.springframework.ui.Model;
 import pt.ricardocabete.livros.services.AuthorService;
 import pt.ricardocabete.livros.services.BookService;
 
-import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Controller
 public class AuthorController {
@@ -63,8 +63,6 @@ public class AuthorController {
     //    isso é reflectido no método updateAuthor
     @GetMapping("/authors/show_update_form/{id}")
     public String mostrarFormEditarAutor(@PathVariable Long id, Model model) {
-        //var author = authorService
-        //model.addAttribute("author", author);
         return "authors/form_edicao_autor";
     }
 
@@ -84,15 +82,15 @@ public class AuthorController {
        }
     }
 
-
-
     // DELETE
     @GetMapping("/delete/{id}")
     public String deleteAuthor(@PathVariable("id") long id, Author author, Model model) {
         //apagar todos os livros que tenham esse autor e depois apagar o autor
-        List<Book> listaDeLivrosDoAutor = bookService.getBookOfAuthor(author);
-        listaDeLivrosDoAutor.clear();
-
+        Set<Book> listaDeLivrosDoAutor = bookService.getBooksOfAuthor(author);
+        listaDeLivrosDoAutor.forEach(book -> {
+            // iterar todos os livros para ver se há mais autores e se houver remover o livro deles
+            // bookService.deleteBook(book);
+        });
 
         // delete À listaDeLivrosDoAutor
         authorService.deleteById(id);
