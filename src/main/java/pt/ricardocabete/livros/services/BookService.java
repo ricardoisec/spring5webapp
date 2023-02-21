@@ -18,6 +18,10 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
+    public Iterable<Book> getAllBooks() {
+        return bookRepository.findAll();
+    }
+
     public Book addBook(Book book) throws BookValidationException {
         validateBookTitle(book.getTitle());
         validateBookIsbn(book.getIsbn());
@@ -35,6 +39,12 @@ public class BookService {
 
         bookRepository.save(existingBook);
     }
+
+    public void deleteById(long id) {
+        bookRepository.deleteById(id);
+    }
+
+
 
     public Set<Book> getBooksOfAuthor(Author author) {
         return author.getBooks();
@@ -71,20 +81,22 @@ public class BookService {
         }
     }
 
+
     public boolean validateBookIsbn(String isbn) {
+
+        //validar se é nulo ou empty
         if (isbn == null || isbn.isEmpty()) {
             return false;
         }
 
-        // 978-0-306-40615-7
+        //remover traços
         isbn = isbn.replace("-", "");
-        // 9780306406157
 
         if (isbn.length() < 10) {
             return false;
         }
 
-        // converte ISBN10 em ISBN13
+        // converter ISBN10 em ISBN13
         if (isbn.length() == 10) {
             isbn = "978" + isbn;
         }
@@ -93,16 +105,15 @@ public class BookService {
             return false;
         }
 
-
-        Integer resultado = -1;
+        //calculo da soma dos digitos
         int somaDigitos = 0;
         for (int i = 0; i < isbn.length() - 1; i++) {
             try {
-                var number = Integer.parseInt(String.valueOf(isbn.charAt(i)));
+                int number = Integer.parseInt(String.valueOf(isbn.charAt(i)));
 
-                if (i % 2 == 0) {   //se for par multiplica 1
+                if (i % 2 == 0) {  //se par -> multiplica nº por 1
                     somaDigitos += number;
-                } else {            //se for impar multiplica por 3
+                } else {            //se impar -> multiplica nº por 3
                     somaDigitos += number * 3;
                 }
             } catch (NumberFormatException exception) {
@@ -110,15 +121,17 @@ public class BookService {
             }
         }
 
+        //calculo do digito de validacao
+        int lastDigit = Integer.parseInt(String.valueOf(isbn.charAt(isbn.length() - 1)));
         int digitoValidacao = 10 - (somaDigitos % 10);
-        if (Integer.parseInt(String.valueOf(isbn.charAt(isbn.length() - 1))) == digitoValidacao) {
-            return true;
+
+        //excecao porque digito de validacao nao pode ser um nº de 2 digitos.
+        // Isto acontece quando a somaDigitos % 10 = 0. Entao converte-se o digitoValidaco para zero
+        if (digitoValidacao == 10) {
+            digitoValidacao = 0;
         }
 
-//        if (resultado.toString().charAt(0) == isbn.charAt(isbn.length() - 1)) {
-//            return true;
-//        }
-
-        return false;
+        return lastDigit == digitoValidacao;
     }
+
 }

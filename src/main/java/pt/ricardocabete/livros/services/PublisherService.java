@@ -1,6 +1,7 @@
 package pt.ricardocabete.livros.services;
 
 import org.springframework.stereotype.Service;
+import pt.ricardocabete.livros.domain.Author;
 import pt.ricardocabete.livros.domain.Publisher;
 import pt.ricardocabete.livros.exception.BookNotFoundException;
 import pt.ricardocabete.livros.exception.PublisherNotFoundException;
@@ -20,6 +21,9 @@ public class PublisherService {
         this.publisherRepository = publisherRepository;
     }
 
+   public Iterable <Publisher> getAllPublishers() {
+        return publisherRepository.findAll();
+   }
     public Publisher adicionarPublisher (Publisher publisher) throws PublisherValidationException {
         validatePublisherName(publisher.getName());
         validatePublisherAddress(publisher.getAddress());
@@ -56,6 +60,10 @@ public class PublisherService {
         existingPublisher.setZip(publisher.getZip());
 
         publisherRepository.save(existingPublisher);
+    }
+
+    public void deleteById(long id) {
+        publisherRepository.deleteById(id);
     }
 
 
@@ -106,33 +114,33 @@ public class PublisherService {
         }
     }
 
-    public void validatePublisherZipcode (String zip) {
+    public boolean validatePublisherZipcode (String zip) {
         if (zip == null) {
             throw new PublisherValidationException("Publisher's zipcode can't be null");
         }
 
-        if (zip.length() < 7 || zip.length() > 8) {
-            throw new PublisherValidationException("Invalid zipcode");
-        }
+//        if (zip.length() < 7 || zip.length() > 8) {
+//            throw new PublisherValidationException("Invalid zipcode");
+//        }
 
         if (zip.length() == 8 && !zip.contains("-")) {
-            throw new PublisherValidationException("Invalid zipcode");
+            zip = zip.substring(0, 4) + "-" + zip.substring(4);
         }
 
-        String zipCode = ("^\\d{4}-\\d{3}$");
-        Pattern pattern = Pattern.compile(zipCode);
-        Matcher matcher = pattern.matcher(zipCode);
 
-        //if (zip.length() == 7 && !zip.contains("-")) {
-          //  zipCode = zipCode.substring(0, 3) + "-" + zipCode.substring(3);
-        //}
+
+        String zipCode = ("^\\d{4}-?\\d{3}$");
+        Pattern pattern = Pattern.compile(zipCode);
+        Matcher matcher = pattern.matcher(zip);
 
         if (!matcher.matches()){
            throw new PublisherValidationException("Zipcode is not valid");
         }
 
+        return true;
+
     }
 
-
-
 }
+
+

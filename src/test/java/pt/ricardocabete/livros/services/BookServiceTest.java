@@ -50,7 +50,7 @@ class BookServiceTest {
 
     @Test
     void validateBookIsbnValidIsbn13aTest() {
-        // TODO: Meter este teste a passar
+        // passado!
         var resultado = bookService.validateBookIsbn("978-3-16-148410-0");
         assertTrue(resultado);
     }

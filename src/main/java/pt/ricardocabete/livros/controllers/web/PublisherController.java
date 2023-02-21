@@ -21,8 +21,8 @@ public class PublisherController {
 
     @GetMapping ("/publishers")
     public String getPublishers (Model model) {
-//        var publishers = publisherRepository.findAll();
-//        model.addAttribute("publishers", publishers);
+       var publishers = publisherService.getAllPublishers();
+       model.addAttribute("publishers", publishers);
 
         return "publishers/lista_de_publishers";
     }
@@ -51,9 +51,7 @@ public class PublisherController {
 
     //editar publisher
     @GetMapping("/publishers/form_update_editora/{id}")
-    public String formEdit (@PathVariable Long id, Model model) {
-//        var publisher = publisherRepository.findById(id).orElse(null);
-//        model.addAttribute("publisher", publisher);
+    public String formEdit (@PathVariable Long id, Model model) {;
         return "publishers/form_update_editora";
     }
 
@@ -74,7 +72,7 @@ public class PublisherController {
     //Apagar
     @GetMapping("/apagar_editora/{id}")
     public String deletePublisher(@PathVariable("id") long id, Model model) {
-//        publisherRepository.deleteById(id);
+        publisherService.deleteById(id);
         return "redirect:/publishers";
     }
 

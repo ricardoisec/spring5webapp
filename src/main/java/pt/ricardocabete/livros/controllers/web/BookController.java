@@ -21,9 +21,9 @@ public class BookController {
 
     @GetMapping("/books")
     public String getBooks(Model model) {
-//        var books = bookRepository.findAll();
+        var books = bookService.getAllBooks();
 //        model.addAttribute("books", books);
-//        model.addAttribute("nome", "Inês");
+        model.addAttribute("nome", "Inês");
 
         return "books/lista_de_livros";
     }
@@ -53,8 +53,6 @@ public class BookController {
     //mostrar formulario
     @GetMapping("/books/update_form/{id}")
     public String updateForm(@PathVariable Long id, Model model) {
-//        var book = bookRepository.findById(id).orElse(null);
-//        model.addAttribute("book", book);
         return "books/update_form";
     }
 
@@ -75,7 +73,7 @@ public class BookController {
     //apagar o livro
     @GetMapping("/apagar_livro/{id}")
     public String deletePublisher(@PathVariable("id") long id, Model model) {
-//        bookRepository.deleteById(id);
+        bookService.deleteById(id);
         return "redirect:/books";
     }
 
