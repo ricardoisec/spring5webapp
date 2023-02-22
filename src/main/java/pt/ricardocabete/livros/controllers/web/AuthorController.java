@@ -63,6 +63,8 @@ public class AuthorController {
     //    isso é reflectido no método updateAuthor
     @GetMapping("/authors/show_update_form/{id}")
     public String mostrarFormEditarAutor(@PathVariable Long id, Model model) {
+        // TODO: é preciso ir sacar o autor ao serviço
+        model.addAttribute("autor", null); // CABETE: mudar este null
         return "authors/form_edicao_autor";
     }
 

@@ -29,6 +29,7 @@ public class PublisherService {
         validatePublisherAddress(publisher.getAddress());
         validatePublisherCity(publisher.getCity());
         validatePublisherDistrict(publisher.getDistrict());
+        publisher.setZip(zipcodeTransformer(publisher.getZip()));
         validatePublisherZipcode(publisher.getZip());
 
         return publisherRepository.save(publisher);
@@ -40,6 +41,7 @@ public class PublisherService {
         validatePublisherAddress(publisher.getAddress());
         validatePublisherCity(publisher.getCity());
         validatePublisherDistrict(publisher.getDistrict());
+        publisher.setZip(zipcodeTransformer(publisher.getZip()));
         validatePublisherZipcode(publisher.getZip());
 
         return publisherRepository.save(publisher);
@@ -50,6 +52,7 @@ public class PublisherService {
         validatePublisherAddress(publisher.getAddress());
         validatePublisherCity(publisher.getCity());
         validatePublisherDistrict(publisher.getDistrict());
+        publisher.setZip(zipcodeTransformer(publisher.getZip()));
         validatePublisherZipcode(publisher.getZip());
 
         var existingPublisher = publisherRepository.findById(id).orElseThrow(() -> new PublisherNotFoundException(id));
@@ -123,12 +126,6 @@ public class PublisherService {
 //            throw new PublisherValidationException("Invalid zipcode");
 //        }
 
-        if (zip.length() == 8 && !zip.contains("-")) {
-            zip = zip.substring(0, 4) + "-" + zip.substring(4);
-        }
-
-
-
         String zipCode = ("^\\d{4}-?\\d{3}$");
         Pattern pattern = Pattern.compile(zipCode);
         Matcher matcher = pattern.matcher(zip);
@@ -141,6 +138,13 @@ public class PublisherService {
 
     }
 
+    private String zipcodeTransformer (String zip) {
+        if (zip.length() == 7 && !zip.contains("-")) {
+            zip = zip.substring(0, 4) + "-" + zip.substring(4);
+        }
+
+        return zip;
+    }
 }
 
 

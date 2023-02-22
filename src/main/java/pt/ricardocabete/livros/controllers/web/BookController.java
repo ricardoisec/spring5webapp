@@ -22,7 +22,7 @@ public class BookController {
     @GetMapping("/books")
     public String getBooks(Model model) {
         var books = bookService.getAllBooks();
-//        model.addAttribute("books", books);
+        model.addAttribute("books", books);
         model.addAttribute("nome", "Inês");
 
         return "books/lista_de_livros";
@@ -53,6 +53,9 @@ public class BookController {
     //mostrar formulario
     @GetMapping("/books/update_form/{id}")
     public String updateForm(@PathVariable Long id, Model model) {
+        // CABETE: carregar este livro em particular do serviço
+        Book book = null;
+        model.addAttribute("book", book);
         return "books/update_form";
     }
 
